@@ -86,7 +86,7 @@
         timeLabel.textColor=[UIColor whiteColor];
         timeLabel.text=model.messageTime;
         timeLabel.textAlignment=NSTextAlignmentCenter;//居中
-        
+        //timeLabel.frame=CGRectMake(<#CGFloat x#>, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>);
         timeLabel.layer.masksToBounds=YES;
         timeLabel.layer.cornerRadius=4;//圆角
         timeLabel.layer.borderColor=(__bridge CGColorRef _Nullable)([UIColor colorWithRed:0.6 green:0.5 blue:1 alpha:0.5]);
@@ -132,18 +132,18 @@
                 //参数2:自适应设置（以行为矩形区域自适应，以字体字形自适应）
                 //参数3:文字属性 通常是字体大小(要用字典存）
                 //参数4:绘制上下文 做底层排版时用，填nil
-                contextBack.frame=CGRectMake(leftWith, masTop, rect.size.width+26, rect.size.height+26);
-                contextBack.image=[[UIImage imageNamed:@"4"] stretchableImageWithLeftCapWidth:10 topCapHeight:25];
+                contextBack.frame=CGRectMake(leftWith, masTop, rect.size.width+50, rect.size.height+30);
+                contextBack.image=[UIImage imageNamed:@"4"]; //stretchableImageWithLeftCapWidth:700 topCapHeight:15];
                 [self.contentView addSubview:contextBack];
                 
                 
                 //消息文字
                 UILabel *textMessageLabel=[[UILabel alloc] init];
-                textMessageLabel.frame=CGRectMake(leftWith+12, masTop+14, rect.size.width, rect.size.height);
+                textMessageLabel.frame=CGRectMake(leftWith+30, masTop+14, rect.size.width, rect.size.height);
                 textMessageLabel.numberOfLines=0;
                 textMessageLabel.lineBreakMode=NSLineBreakByWordWrapping;
                 textMessageLabel.font=textFont;
-                textMessageLabel.textColor=[UIColor colorWithRed:0.5 green:0.6 blue:1 alpha:0.8];
+                textMessageLabel.textColor=[UIColor whiteColor];
                 textMessageLabel.text=model.messageText;
                 [self.contentView addSubview:textMessageLabel];
             }
@@ -165,17 +165,17 @@
                 CGRect rect=[model.messageText boundingRectWithSize:CGSizeMake(maxWith, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
                 
                 
-                contextBack.frame=CGRectMake(AppFrameWidth-(rect.size.width+26)-leftWith+12, masTop, rect.size.width+26, rect.size.height+26);
-                contextBack.image=[[UIImage imageNamed:@"3"] stretchableImageWithLeftCapWidth:10 topCapHeight:25];
+                contextBack.frame=CGRectMake(AppFrameWidth-(rect.size.width+50)-leftWith, masTop, rect.size.width+50, rect.size.height+26);
+                contextBack.image=[UIImage imageNamed:@"3"]; //stretchableImageWithLeftCapWidth:700 topCapHeight:15];
                 [self.contentView addSubview: contextBack];
                 
                 
                 UILabel *textMessageLabel=[[UILabel alloc] init];
-                textMessageLabel.frame=CGRectMake(AppFrameWidth-(rect.size.width+26)-leftWith+12, masTop+14, rect.size.width, rect.size.height);
+                textMessageLabel.frame=CGRectMake(AppFrameWidth-(rect.size.width+50)-leftWith+20, masTop+14, rect.size.width, rect.size.height);
                 textMessageLabel.numberOfLines=0;
                 textMessageLabel.lineBreakMode=NSLineBreakByWordWrapping;
                 textMessageLabel.font=textFont;
-                textMessageLabel.textColor=[UIColor colorWithRed:0.5 green:0.6 blue:1 alpha:0.8];
+                textMessageLabel.textColor=[UIColor whiteColor];
                 textMessageLabel.text=model.messageText;
                 [self.contentView addSubview:textMessageLabel];
 
@@ -193,7 +193,7 @@
                 
                 CGSize imageSize=[WeChatCell imageShowSize:model.imageSmall];
                 
-                UIImageView *imageViewMask=[[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"5"]stretchableImageWithLeftCapWidth:10 topCapHeight:25]];
+                UIImageView *imageViewMask=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"5"]];//stretchableImageWithLeftCapWidth:700 topCapHeight:15]];
                 
                 imageViewMask.frame=CGRectMake(0, 0, imageSize.width, imageSize.height);
                 contextBack.frame=CGRectMake(leftWith, masTop, imageSize.width, imageSize.height);
@@ -205,13 +205,13 @@
             else if(model.messageSenderType==MessageSenderTypeUser)
             {
                 UIImageView *logoImage=[[UIImageView alloc] init];
-                logoImage.frame=CGRectMake(AppFrameWidth-10-40, masTop, 40, 40);
+                logoImage.frame=CGRectMake(AppFrameWidth-10-40, masTop, 60, 60);
                 [logoImage setImage:[UIImage imageNamed:@"2"]];
                 [self.contentView addSubview:logoImage];
                 
                 CGSize imageSize=[WeChatCell imageShowSize:model.imageSmall];
                 
-                UIImageView *imageViewMask=[[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"6"]stretchableImageWithLeftCapWidth:10 topCapHeight:25]];
+                UIImageView *imageViewMask=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"6"]];//stretchableImageWithLeftCapWidth:700 topCapHeight:15]];
                 
                 imageViewMask.frame=CGRectMake(0, 0, imageSize.width, imageSize.height);
                 
@@ -239,12 +239,12 @@
         
         if (model.messageSenderType==MessageSenderTypeZN)
         {
-            self.coversImageView.image=[[UIImage imageNamed:@"4"]stretchableImageWithLeftCapWidth:10 topCapHeight:25];
+            self.coversImageView.image=[UIImage imageNamed:@"4"];//stretchableImageWithLeftCapWidth:700 topCapHeight:15];
         }
         
         else
         {
-            self.coversImageView.image=[[UIImage imageNamed:@"3"]stretchableImageWithLeftCapWidth:10 topCapHeight:25];
+            self.coversImageView.image=[UIImage imageNamed:@"3"];//stretchableImageWithLeftCapWidth:700 topCapHeight:15];
         }
         
         [self.contentView addSubview:self.coversImageView];
