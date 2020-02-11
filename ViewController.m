@@ -9,9 +9,14 @@
 #import "ViewController.h"
 #import "WeChatCell.h"
 #import "MessageModel.h"
+#import "MessageStore.h"
 #import "NextViewController.h"
-
-@interface ViewController ()
+#import "Keyboard/KeyboardView.h"
+#import "Keyboard/MoreView.h"
+#import "Keyboard/EmojiView.h"
+#import "Keyboard/TextView.h"
+#import "Keyboard/UIView+FrameTool.h"
+@interface ViewController ()<KeyboardDelegate,UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate>
 
 @end
 
@@ -56,15 +61,23 @@
     //    [vc1.navigationController.navigationBar setTitleTextAttributes:attributes];
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20],NSForegroundColorAttributeName:[UIColor whiteColor]}];
     
-    
+    UITapGestureRecognizer *tapGesture=[[UITapGestureRecognizer alloc]init];
+    tapGesture.delegate=self;
+    [self.table addGestureRecognizer:tapGesture];
     
     UIBarButtonItem *moreBarButtonItem=[[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"5"] style:UIBarButtonItemStyleDone target:self action:@selector(clickToSettingPage)];
     self.navigationItem.rightBarButtonItem=moreBarButtonItem;
     
+    self.view.backgroundColor=[UIColor colorWithRed:0.92 green:0.92 blue:0.92 alpha:1];
+    
     self.table.separatorColor=[UIColor clearColor];
     self.table.delegate=self;
     self.table.dataSource=self;
+    self.keyView=[[KeyboardView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height-52-StatusNav_Height, AppFrameWidth, 52)];
+    self.keyView.delegate=self;
     [self.view addSubview:self.table];
+    [self.view addSubview:_keyView];
+    
     
 }
 
@@ -104,6 +117,63 @@
     
 }
 
+//发送的文本
+-(void)textViewContentText:(NSString *)textStr{
+    MessageModel *userCell=[[MessageModel alloc]init];
+    userCell.messageText=textStr;
+    userCell.messageSenderType=MessageSenderTypeUser;
+    userCell.showMessageTime=NO;
+    userCell.messageType=MessageTypeText;
+    [self.arrList addObject:userCell];
+    [self.table reloadData];
+    [self scrollToBottom];
+    
+}
+//keyboard的frame改变
+-(void)keyboardChangeFrameWithMinY:(CGFloat)minY{
+    [self scrollToBottom];
+    //获取对应cell的rect值
+    NSIndexPath *lastIndex=[NSIndexPath indexPathForRow:self.arrList.count-1 inSection:0];
+    CGRect rect=[self.table rectForRowAtIndexPath:lastIndex];
+    CGFloat lastMaxY=rect.origin.y+rect.size.height;
+    //如果最后一个cell的最大Y值大于tableview的高度
+    if (lastMaxY <= self.table.height) {
+        if (lastMaxY >= minY) {
+            self.table.y=minY-lastMaxY;
+        }
+        else
+        {
+            self.table.y=0;
+        }
+        
+    }
+    else{
+        self.table.y+=minY-self.table.maxY;
+    }
+    
+}
+//tableView滚动到底部
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [self scrollToBottom];
+}
+
+-(void)scrollToBottom{
+    if (self.arrList.count>=1) {
+        [self.table scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:MAX(0, self.arrList.count-1) inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    }
+}
+
+//点击UITableView
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(nonnull UITouch *)touch{
+    //收回键盘
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"keyboardHide" object:nil];
+    //若为UITableViewCellContentView（即点击了tavleViewCell） 则不截获touch事件
+    if ([NSStringFromClass([touch.view class])isEqualToString:@"UITableViewCellContentView"]) {
+        return NO;
+    }
+    return YES;
+}
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
@@ -130,34 +200,23 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     WeChatCell *cell=[WeChatCell cellWithTableView:self.table messageModel:self.arrList[indexPath.row]];
-//    [cell setDoubleblock:^(MessageModel *model)
-//     {
-//         NSLog(@"%@-------",model.messageText);
-//     }];
-//
-//    [cell setSingleblock:^(MessageModel *model)
-//     {
-//
-//     }];
+
     return cell;
    
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//     WeChatCell *cell=[WeChatCell cellWithTableView:self.table messageModel:self.arrList[indexPath.row]];
-    
-    
-    
-    
-    
+
 }
 
 -(void)clickToSettingPage{
     NextViewController *nextVc=[[NextViewController alloc] init];
     [self.navigationController pushViewController:nextVc animated:YES];
-    
-    
 }
 
+
+-(void)addNew{
+
+}
 @end
