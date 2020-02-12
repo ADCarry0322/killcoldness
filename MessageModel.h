@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 //消息类型
-typedef NS_OPTIONS (NSUInteger,MessageType)
+typedef NS_ENUM (NSUInteger,MessageType)
 {
     MessageTypeText=1,
     MessageTypeVoice,
@@ -19,14 +19,15 @@ typedef NS_OPTIONS (NSUInteger,MessageType)
 };
 
 //消息发送方
-typedef NS_OPTIONS (NSUInteger,MessageSenderType)
+typedef NS_ENUM (NSUInteger,MessageSenderType)
 {
     MessageSenderTypeZN=1,
     MessageSenderTypeUser
 };
 
 
-@interface MessageModel : NSObject
+@interface MessageModel : NSObject<NSCoding>
+
 
 @property (nonatomic,assign)MessageType   messageType;
 
@@ -38,7 +39,6 @@ typedef NS_OPTIONS (NSUInteger,MessageSenderType)
 
 @property (nonatomic,retain)NSString *messageText;
 
-@property (nonatomic,retain)NSString *imageUrl;
 
 @property (nonatomic,retain)UIImage *imageSmall;
 
