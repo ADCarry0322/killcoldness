@@ -8,7 +8,7 @@
 
 #import "NextViewController.h"
 #import "WeChatCell.h"
-@interface NextViewController ()
+@interface NextViewController ()<UITextFieldDelegate>
 
 @end
 
@@ -18,6 +18,7 @@
     [super viewDidLoad];
     self.navigationItem.title=@"聊天详情";
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20],NSForegroundColorAttributeName:[UIColor whiteColor]}];
+ 
     
     
     CAGradientLayer *gradientLayer=[CAGradientLayer layer];
@@ -66,7 +67,12 @@
     nameField.layer.borderWidth=1;
     nameField.clearButtonMode=UITextFieldViewModeWhileEditing;//一键清除
     nameField.keyboardType=UIKeyboardTypeDefault;
+    nameField.returnKeyType=UIReturnKeyJoin;
     nameField.delegate=self;
+    
+    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+    nameField.placeholder=[defaults objectForKey:@"title"];
+    [self textFieldShouldReturn:nameField];
     [self.view addSubview:nameField];
 
 }
@@ -77,7 +83,10 @@
     [self.view addSubview:logoImage];
 }
 
-
+-(void)textFieldDidEndEditing:(UITextField *)textField{
+    NSUserDefaults *userDefaults=[NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:textField.text forKey:@"name"];
+}
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
