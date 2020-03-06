@@ -14,11 +14,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MessageStore : NSObject
 
-@property(nonatomic,readonly)NSMutableArray *privateMessages;
-
-//-(WeChatCell *)sendMessage;
+@property(nonatomic,readwrite)NSMutableArray<MessageModel *>*privateMessages;
 
 +(instancetype)sharedStore;
+
+-(void)saveData;
+
+-(NSArray *)readData;
+
 @end
 
 NS_ASSUME_NONNULL_END
